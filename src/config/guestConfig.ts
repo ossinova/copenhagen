@@ -195,9 +195,10 @@ export const guestConfig: GuestConfig = {
           { name: 'Little Mermaid', description: 'Iconic statue (overrated)', tip: 'Go if you are near Kastellet' },
           { name: 'Amalienborg & Marmorkirken', description: 'Royal palace & marble church', tip: 'Changing of the guard' },
           { name: 'Canal Tour', description: 'Depart from Nyhavn', tip: 'Best city views' },
-          { name: 'Nyhavn & Broen Gatekjøkken', description: 'Photos & food' },
-          { name: 'Freetown Christiania', description: 'Alternative neighborhood', tip: 'No photos on Pusher Street' },
-          { name: 'Meatpacking District', description: 'Restaurants, cafés & bars' },
+          { name: 'Nyhavn & Broen Gatekjøkken', description: 'Photos & food', tip: 'Best at night' },
+          { name: 'Freetown Christiania', description: 'Alternative neighborhood', tip: 'Hippie paradise' },
+          { name: 'Meatpacking District', description: 'Restaurants, cafés & bars' , tip: 'Best at night'},
+          { name: 'Tivoli Gardens', description: 'Amusement park' , tip: 'Best at night - Friday Rock Concerts'},
         ],
       },
       {
