@@ -1,4 +1,5 @@
 export type HostInfo = {
+  houseName?: string
   addressLine1: string
   addressLine2?: string
   city: string
@@ -23,7 +24,36 @@ export type HostInfo = {
   }
   countriesLived?: string[]
   photo?: string // path under public/
-  houseName?: string
+  // Additional properties
+  emergencyContacts?: Array<{
+    name: string
+    number: string
+    description: string
+  }>
+  transport?: {
+    options: Array<{
+      type: string
+      icon: any
+      description: string
+      details: string[]
+    }>
+  }
+  practicalTips?: Array<{
+    category: string
+    icon: any
+    tips: string[]
+  }>
+  houseRules?: string[]
+  weather?: {
+    tips: string[]
+  }
+  timeZone?: {
+    tips: string[]
+  }
+  essentialApps?: Array<{
+    name: string
+    description: string
+  }>
 }
 
 export type WifiInfo = {

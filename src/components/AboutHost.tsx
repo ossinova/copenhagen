@@ -1,5 +1,5 @@
 import { Card, CardContent } from '@/components/ui/card'
-import { User, MapPin, Heart, Globe } from 'lucide-react'
+import { User, Heart, Globe } from 'lucide-react'
 import { guestConfig } from '@/config/guestConfig'
 
 function calculateAge(birthdayIso: string): number {

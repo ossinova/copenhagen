@@ -1,28 +1,10 @@
 import { Card, CardContent } from '@/components/ui/card'
-import { Info, Phone, MapPin, Clock, CreditCard, Wifi, Car, Train, Plane, ShoppingBag, Utensils, Home, AlertTriangle, Heart, Cloud, Smartphone } from 'lucide-react'
+import { Info, Phone, Clock, Train, Heart, Cloud, Smartphone } from 'lucide-react'
 import { guestConfig } from '@/config/guestConfig'
 
 export function PracticalInfo() {
   const { host } = guestConfig
 
-  const getIconComponent = (iconName: string) => {
-    switch (iconName) {
-      case 'CreditCard': return CreditCard;
-      case 'Wifi': return Wifi;
-      case 'ShoppingBag': return ShoppingBag;
-      case 'Utensils': return Utensils;
-      case 'Train': return Train;
-      case 'Bike': return Bike;
-      case 'Car': return Car;
-      case 'Cloud': return Cloud;
-      case 'Smartphone': return Smartphone;
-      case 'Heart': return Heart;
-      case 'Info': return Info;
-      case 'AlertTriangle': return AlertTriangle;
-      case 'Clock': return Clock;
-      default: return Info;
-    }
-  }
 
   return (
     <div className="space-y-6 sm:space-y-8">
@@ -50,7 +32,7 @@ export function PracticalInfo() {
               <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">Emergency Contacts</h3>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-              {host.emergencyContacts.map((contact, index) => (
+              {host.emergencyContacts?.map((contact, index) => (
                 <div key={index} className="p-3 sm:p-4 bg-gray-50 rounded-lg border border-gray-200">
                   <div className="flex items-center gap-3">
                     <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
@@ -74,7 +56,7 @@ export function PracticalInfo() {
               <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">Transportation</h3>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-              {host.transport.options.map((option, index) => {
+              {host.transport?.options.map((option, index) => {
                 const Icon = option.icon
                 return (
                   <div key={index} className="p-3 sm:p-4 bg-gray-50 rounded-lg border border-gray-200">
@@ -108,7 +90,7 @@ export function PracticalInfo() {
               <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">Practical Tips</h3>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              {host.practicalTips.map((category, index) => {
+              {host.practicalTips?.map((category, index) => {
                 const Icon = category.icon
                 return (
                   <div key={index} className="space-y-3 p-3 sm:p-4 bg-gray-50 rounded-lg border border-gray-200">
@@ -139,7 +121,7 @@ export function PracticalInfo() {
               <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">House Rules</h3>
             </div>
             <div className="space-y-3">
-              {host.houseRules.map((rule, index) => (
+              {host.houseRules?.map((rule, index) => (
                 <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
                   <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 mt-0.5 flex-shrink-0" />
                   <p className="text-gray-700 text-sm sm:text-base">{rule}</p>
@@ -163,7 +145,7 @@ export function PracticalInfo() {
                   <h4 className="font-semibold text-gray-900 text-sm sm:text-base">Weather Tips</h4>
                 </div>
                 <ul className="space-y-2 text-xs sm:text-sm text-gray-700">
-                  {host.weather.tips.map((tip, index) => (
+                  {host.weather?.tips.map((tip, index) => (
                     <li key={index} className="flex items-start gap-2">
                       <span className="text-gray-500 mt-1">•</span>
                       {tip}
@@ -177,7 +159,7 @@ export function PracticalInfo() {
                   <h4 className="font-semibold text-gray-900 text-sm sm:text-base">Time Zone</h4>
                 </div>
                 <ul className="space-y-2 text-xs sm:text-sm text-gray-700">
-                  {host.timeZone.tips.map((tip, index) => (
+                  {host.timeZone?.tips.map((tip, index) => (
                     <li key={index} className="flex items-start gap-2">
                       <span className="text-gray-500 mt-1">•</span>
                       {tip}
@@ -197,7 +179,7 @@ export function PracticalInfo() {
               <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">Essential Apps</h3>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-              {host.essentialApps.map((app, index) => (
+              {host.essentialApps?.map((app, index) => (
                 <div key={index} className="p-3 sm:p-4 bg-gray-50 rounded-lg border border-gray-200">
                   <div className="flex items-center gap-3">
                     <Smartphone className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />

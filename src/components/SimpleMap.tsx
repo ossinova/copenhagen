@@ -80,7 +80,7 @@ export function SimpleMap() {
               </div>
               <div className="space-y-3 sm:space-y-4 max-h-96 overflow-y-auto">
                 {copenhagenLocations.map((location) => {
-                  const Icon = getIconComponent(location.icon.name)
+                  const Icon = getIconComponent(location.icon?.name || 'MapPin')
                   return (
                     <Card key={location.id} className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200 hover:shadow-md transition-all duration-200">
                       <CardContent className="p-0">
@@ -153,7 +153,7 @@ export function SimpleMap() {
                 <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">Smart Travel Tips</h3>
               </div>
               <div className="space-y-3 sm:space-y-4">
-                {guestConfig.host.practicalTips.map((category, index) => {
+                {guestConfig.host.practicalTips?.map((category, index) => {
                   const Icon = getIconComponent(category.icon.name)
                   return (
                     <div key={index} className="bg-gray-50 p-3 sm:p-4 rounded-xl border border-gray-200">
