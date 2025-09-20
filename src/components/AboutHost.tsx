@@ -1,5 +1,5 @@
 import { Card, CardContent } from '@/components/ui/card'
-import { User, Heart, Globe } from 'lucide-react'
+import { User, Heart, Globe, Instagram, MessageCircle, Users } from 'lucide-react'
 import { guestConfig } from '@/config/guestConfig'
 
 function calculateAge(birthdayIso: string): number {
@@ -69,6 +69,46 @@ export function AboutHost() {
                 <p className="text-gray-700 text-sm">{host.countriesLived.join(', ')}</p>
               </div>
             )}
+
+            {/* Social Media */}
+            <div>
+              <h5 className="font-semibold text-gray-900 mb-3 text-sm sm:text-base">Connect With Me</h5>
+              <div className="flex flex-wrap gap-3">
+                {host.instagram && (
+                  <a
+                    href={`https://instagram.com/${host.instagram}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-200 text-sm font-medium"
+                  >
+                    <Instagram className="w-4 h-4" />
+                    Instagram
+                  </a>
+                )}
+                {host.whatsapp && (
+                  <a
+                    href={`https://wa.me/${host.whatsapp.replace(/[^0-9]/g, '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all duration-200 text-sm font-medium"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    WhatsApp
+                  </a>
+                )}
+                {host.couchsurfing && (
+                  <a
+                    href={host.couchsurfing}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-3 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-all duration-200 text-sm font-medium"
+                  >
+                    <Users className="w-4 h-4" />
+                    Couchsurfing
+                  </a>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </CardContent>

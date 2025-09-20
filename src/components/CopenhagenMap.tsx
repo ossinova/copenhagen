@@ -10,6 +10,8 @@ export function CopenhagenMap() {
   const [TileLayer, setTileLayer] = useState<any>(null)
   const [Marker, setMarker] = useState<any>(null)
   const [Popup, setPopup] = useState<any>(null)
+  const [selectedLocation, setSelectedLocation] = useState<number | null>(null)
+  const [mapRef, setMapRef] = useState<any>(null)
 
   useEffect(() => {
     const loadLeaflet = async () => {
@@ -36,6 +38,17 @@ export function CopenhagenMap() {
 
   const mapConfig = guestConfig.map
   const locations = mapConfig.locations
+
+  const handleLocationClick = (locationId: number) => {
+    setSelectedLocation(locationId)
+    const location = locations.find(loc => loc.id === locationId)
+    if (location && location.coordinates && mapRef) {
+      mapRef.setView(location.coordinates, 16, {
+        animate: true,
+        duration: 1
+      })
+    }
+  }
 
   const getIconComponent = (iconName: string) => {
     switch (iconName) {
@@ -132,6 +145,7 @@ export function CopenhagenMap() {
               center={mapConfig.center || [55.6761, 12.5683]}
               zoom={mapConfig.zoom || 13}
               style={{ height: '100%', width: '100%' }}
+              ref={setMapRef}
             >
               <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -207,7 +221,15 @@ export function CopenhagenMap() {
                 {locations.map((location) => {
                   const Icon = location.icon ? getIconComponent(location.icon.name) : MapPin
                   return (
-                    <Card key={location.id} className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200 hover:shadow-md transition-all duration-200">
+                    <Card 
+                      key={location.id} 
+                      className={`bg-white p-3 sm:p-4 rounded-xl border transition-all duration-200 cursor-pointer ${
+                        selectedLocation === location.id 
+                          ? 'border-blue-500 shadow-lg ring-2 ring-blue-200' 
+                          : 'border-gray-200 hover:shadow-md hover:border-gray-300'
+                      }`}
+                      onClick={() => handleLocationClick(location.id)}
+                    >
                       <CardContent className="p-0">
                         <div className="flex items-start gap-3">
                           <div className={`p-2 rounded-lg ${location.color || 'bg-gray-500'} flex-shrink-0`}>
@@ -279,7 +301,7 @@ export function CopenhagenMap() {
               </div>
               <div className="space-y-3 sm:space-y-4">
                 {guestConfig.host.practicalTips?.map((category, index) => {
-                  const Icon = getIconComponent(category.icon.name)
+                  const Icon = getIconComponent(category.icon)
                   return (
                     <div key={index} className="bg-gray-50 p-3 sm:p-4 rounded-xl border border-gray-200">
                       <div className="flex items-center gap-3 mb-3">

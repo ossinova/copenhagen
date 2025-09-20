@@ -24,6 +24,10 @@ export type HostInfo = {
   }
   countriesLived?: string[]
   photo?: string // path under public/
+  // Social media
+  instagram?: string
+  whatsapp?: string
+  couchsurfing?: string
   // Additional properties
   emergencyContacts?: Array<{
     name: string
@@ -127,6 +131,128 @@ export const guestConfig: GuestConfig = {
     },
     countriesLived: ['Norway', 'Thailand', 'USA', 'Denmark'],
     photo: '/me.png',
+    // Social media
+    instagram: 'norsehorizon',
+    whatsapp: '+47 98605552',
+    couchsurfing: 'https://www.couchsurfing.com/people/oscar-dyremyhr-1',
+    // Emergency contacts
+    emergencyContacts: [
+      {
+        name: 'Oscar (Host)',
+        number: '+47 98605552',
+        description: 'Available 24/7 for emergencies'
+      },
+      {
+        name: 'Emergency Services',
+        number: '112',
+        description: 'Police, Fire, Medical'
+      }
+    ],
+    // Transportation options
+    transport: {
+      options: [
+        {
+          type: 'Train Station',
+          icon: 'Train',
+          description: 'Dybbølsbro Station - 2 min walk',
+          details: ['Metro M1/M2 lines', 'S-train connections', 'Bus connections nearby']
+        },
+        {
+          type: 'Airport',
+          icon: 'Plane',
+          description: 'CPH Airport - 30 min by metro',
+          details: ['Metro M2 to Kongens Nytorg', 'Then M4 to Havneholmen', 'Total: ~30 minutes']
+        }
+      ]
+    },
+    // Practical tips
+    practicalTips: [
+      {
+        category: 'Getting Around',
+        icon: 'MapPin',
+        tips: [
+          'Download Rejseplanen app for public transport',
+          'Get a Rejsekort (travel card) for cheaper fares',
+          'Bikes are everywhere - consider renting one',
+          'Walking is often faster than public transport in city center'
+        ]
+      },
+      {
+        category: 'Money & Payments',
+        icon: 'CreditCard',
+        tips: [
+          'Denmark is mostly cashless - cards accepted everywhere',
+          'Tipping is not expected but appreciated (10% max)',
+          'VAT is included in all prices',
+          'ATMs are widely available'
+        ]
+      },
+      {
+        category: 'Food & Dining',
+        icon: 'Utensils',
+        tips: [
+          'Restaurants are expensive - budget accordingly',
+          'Try smørrebrød (open sandwiches)',
+          'Supermarkets close early (6-8 PM)',
+          'Tap water is safe and free everywhere'
+        ]
+      },
+      {
+        category: 'Safety & Emergency',
+        icon: 'AlertTriangle',
+        tips: [
+          'Copenhagen is very safe, even at night',
+          'Emergency number: 112',
+          'Keep your belongings secure in crowded areas',
+          'Bike theft is common - always lock your bike'
+        ]
+      }
+    ],
+    // House rules
+    houseRules: [
+      'No smoking inside the apartment',
+      'Please remove shoes at the entrance',
+      'Keep noise down after 10 PM',
+      'Clean up after yourself in shared spaces',
+      'Let me know if you need anything!'
+    ],
+    // Weather tips
+    weather: {
+      tips: [
+        'Weather changes quickly - always bring layers',
+        'Rain is common - pack a light rain jacket',
+        'Summer: 15-25°C, Winter: -5 to 5°C',
+        'Check weather forecast daily'
+      ]
+    },
+    // Time zone info
+    timeZone: {
+      tips: [
+        'Copenhagen is GMT+1 (CET)',
+        'Daylight saving: GMT+2 (CEST) March-October',
+        'Sunrise: 4:30 AM (summer), 8:30 AM (winter)',
+        'Sunset: 10 PM (summer), 4 PM (winter)'
+      ]
+    },
+    // Essential apps
+    essentialApps: [
+      {
+        name: 'Rejseplanen',
+        description: 'Public transport planning'
+      },
+      {
+        name: 'MobilePay',
+        description: 'Danish payment app'
+      },
+      {
+        name: 'Too Good To Go',
+        description: 'Cheap food from restaurants'
+      },
+      {
+        name: 'Donkey Republic',
+        description: 'Bike sharing app'
+      }
+    ]
   },
   wifi: {
     ssid: 'NOKIA-4351',
@@ -200,6 +326,136 @@ export const guestConfig: GuestConfig = {
         tips: ['Try smørrebrød and local cheeses', 'Great for lunch', 'Can be expensive but worth it'],
         bestTime: 'Lunch time (12-2 PM)',
         cost: 'DKK 50-200',
+        duration: '1-2 hours',
+      },
+      {
+        id: 6,
+        name: 'Rosenborg Castle',
+        type: 'museum',
+        coordinates: [55.6857, 12.5775],
+        description: 'Renaissance castle with crown jewels and beautiful gardens',
+        icon: { name: 'BookOpen' },
+        color: 'bg-purple-500',
+        tips: ['See the crown jewels in the basement', 'Beautiful gardens are free', 'Great for history lovers'],
+        bestTime: 'Morning (less crowded)',
+        cost: 'DKK 130',
+        duration: '2-3 hours',
+      },
+      {
+        id: 7,
+        name: 'Round Tower',
+        type: 'attraction',
+        coordinates: [55.6814, 12.5760],
+        description: '17th-century tower with panoramic city views',
+        icon: { name: 'Camera' },
+        color: 'bg-blue-500',
+        tips: ['Spiral walkway to the top', 'Best views of Copenhagen', 'No elevator - be prepared to walk'],
+        bestTime: 'Sunset for best photos',
+        cost: 'DKK 40',
+        duration: '1 hour',
+      },
+      {
+        id: 8,
+        name: 'Freetown Christiania',
+        type: 'attraction',
+        coordinates: [55.6739, 12.6014],
+        description: 'Alternative neighborhood with unique culture',
+        icon: { name: 'Sparkles' },
+        color: 'bg-green-500',
+        tips: ['No photos on Pusher Street', 'Respect the community rules', 'Great for alternative culture'],
+        bestTime: 'Daytime (safer)',
+        cost: 'Free to visit',
+        duration: '1-2 hours',
+      },
+      {
+        id: 9,
+        name: 'Amalienborg Palace',
+        type: 'attraction',
+        coordinates: [55.6840, 12.5933],
+        description: 'Royal residence with changing of the guard',
+        icon: { name: 'Camera' },
+        color: 'bg-yellow-500',
+        tips: ['Changing of guard at 12:00', 'See the royal palace', 'Near Marmorkirken'],
+        bestTime: '12:00 for guard ceremony',
+        cost: 'Free to visit square',
+        duration: '30 minutes',
+      },
+      {
+        id: 10,
+        name: 'Canal Tours (Nyhavn)',
+        type: 'attraction',
+        coordinates: [55.6794, 12.5906],
+        description: 'Boat tours through Copenhagen canals',
+        icon: { name: 'Plane' },
+        color: 'bg-cyan-500',
+        tips: ['Best way to see the city', 'Multiple tour companies', 'Book online for discounts'],
+        bestTime: 'Morning or afternoon',
+        cost: 'DKK 80-120',
+        duration: '1 hour',
+      },
+      {
+        id: 11,
+        name: 'National Museum',
+        type: 'museum',
+        coordinates: [55.6754, 12.5714],
+        description: 'Denmark\'s largest cultural history museum',
+        icon: { name: 'BookOpen' },
+        color: 'bg-indigo-500',
+        tips: ['Great Viking exhibition', 'Free on Wednesdays', 'Large museum - plan your visit'],
+        bestTime: 'Wednesday (free entry)',
+        cost: 'DKK 100 (free Wed)',
+        duration: '2-4 hours',
+      },
+      {
+        id: 12,
+        name: 'Meatpacking District',
+        type: 'food',
+        coordinates: [55.6614, 12.5514],
+        description: 'Trendy area with restaurants, bars, and nightlife',
+        icon: { name: 'Utensils' },
+        color: 'bg-red-500',
+        tips: ['Great for dinner and drinks', 'Trendy atmosphere', 'Many options to choose from'],
+        bestTime: 'Evening',
+        cost: 'DKK 200-400',
+        duration: '2-3 hours',
+      },
+      {
+        id: 13,
+        name: 'Superkilen Park',
+        type: 'nature',
+        coordinates: [55.6900, 12.5500],
+        description: 'Colorful urban park in Nørrebro',
+        icon: { name: 'Mountain' },
+        color: 'bg-pink-500',
+        tips: ['Instagram-worthy photos', 'Unique design', 'Great for a walk'],
+        bestTime: 'Daytime',
+        cost: 'Free',
+        duration: '1 hour',
+      },
+      {
+        id: 14,
+        name: 'Copenhill',
+        type: 'attraction',
+        coordinates: [55.6514, 12.6014],
+        description: 'Ski slope on top of a waste-to-energy plant',
+        icon: { name: 'Mountain' },
+        color: 'bg-slate-500',
+        tips: ['Unique Copenhagen experience', 'Great views from the top', 'Can ski year-round'],
+        bestTime: 'Any time',
+        cost: 'DKK 200-300',
+        duration: '2-3 hours',
+      },
+      {
+        id: 15,
+        name: 'Reffen Street Food',
+        type: 'food',
+        coordinates: [55.6914, 12.6014],
+        description: 'Outdoor street food market by the water',
+        icon: { name: 'Utensils' },
+        color: 'bg-orange-500',
+        tips: ['Great variety of food', 'Nice waterfront location', 'Cashless payments'],
+        bestTime: 'Lunch or dinner',
+        cost: 'DKK 80-150',
         duration: '1-2 hours',
       },
     ],

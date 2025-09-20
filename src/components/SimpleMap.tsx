@@ -154,7 +154,7 @@ export function SimpleMap() {
               </div>
               <div className="space-y-3 sm:space-y-4">
                 {guestConfig.host.practicalTips?.map((category, index) => {
-                  const Icon = getIconComponent(category.icon.name)
+                  const Icon = getIconComponent(category.icon)
                   return (
                     <div key={index} className="bg-gray-50 p-3 sm:p-4 rounded-xl border border-gray-200">
                       <div className="flex items-center gap-3 mb-3">

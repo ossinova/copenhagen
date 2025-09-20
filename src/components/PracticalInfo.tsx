@@ -1,9 +1,27 @@
 import { Card, CardContent } from '@/components/ui/card'
-import { Info, Phone, Clock, Train, Heart, Cloud, Smartphone } from 'lucide-react'
+import { Info, Phone, Clock, Train, Heart, Cloud, Smartphone, Plane, MapPin, CreditCard, Utensils, AlertTriangle } from 'lucide-react'
 import { guestConfig } from '@/config/guestConfig'
 
 export function PracticalInfo() {
   const { host } = guestConfig
+
+  const getIconComponent = (iconName: string) => {
+    switch (iconName) {
+      case 'Train': return Train;
+      case 'Plane': return Plane;
+      case 'MapPin': return MapPin;
+      case 'CreditCard': return CreditCard;
+      case 'Utensils': return Utensils;
+      case 'AlertTriangle': return AlertTriangle;
+      case 'Info': return Info;
+      case 'Phone': return Phone;
+      case 'Clock': return Clock;
+      case 'Heart': return Heart;
+      case 'Cloud': return Cloud;
+      case 'Smartphone': return Smartphone;
+      default: return Info;
+    }
+  }
 
 
   return (
@@ -57,7 +75,7 @@ export function PracticalInfo() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {host.transport?.options.map((option, index) => {
-                const Icon = option.icon
+                const Icon = getIconComponent(option.icon)
                 return (
                   <div key={index} className="p-3 sm:p-4 bg-gray-50 rounded-lg border border-gray-200">
                     <div className="flex items-center gap-3 mb-3">
@@ -91,7 +109,7 @@ export function PracticalInfo() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               {host.practicalTips?.map((category, index) => {
-                const Icon = category.icon
+                const Icon = getIconComponent(category.icon)
                 return (
                   <div key={index} className="space-y-3 p-3 sm:p-4 bg-gray-50 rounded-lg border border-gray-200">
                     <div className="flex items-center gap-3">
