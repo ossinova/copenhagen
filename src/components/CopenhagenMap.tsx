@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { MapPin, Clock, Info, Home, Camera, ShoppingBag, Coffee, Mountain, BookOpen, Plane, Sparkles, Bike, CreditCard, Wifi, Car, Cloud, Smartphone, Heart, AlertTriangle, Train, Utensils } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { MapPin, Clock, Info, Home, Camera, ShoppingBag, Coffee, Mountain, BookOpen, Plane, Sparkles, Bike, CreditCard, Wifi, Car, Cloud, Smartphone, Heart, AlertTriangle, Train, Utensils, Search, Filter, X } from 'lucide-react'
 import 'leaflet/dist/leaflet.css'
 import { guestConfig } from '@/config/guestConfig'
 
@@ -12,6 +13,9 @@ export function CopenhagenMap() {
   const [Popup, setPopup] = useState<any>(null)
   const [selectedLocation, setSelectedLocation] = useState<number | null>(null)
   const [mapRef, setMapRef] = useState<any>(null)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([])
+  const [showFilters, setShowFilters] = useState(false)
 
   useEffect(() => {
     const loadLeaflet = async () => {
@@ -38,6 +42,35 @@ export function CopenhagenMap() {
 
   const mapConfig = guestConfig.map
   const locations = mapConfig.locations
+
+  // Get unique types for filter options
+  const availableTypes = useMemo(() => {
+    const types = [...new Set(locations.map(loc => loc.type))]
+    return types
+  }, [locations])
+
+  // Filter locations based on search and type filters
+  const filteredLocations = useMemo(() => {
+    return locations.filter(location => {
+      const matchesSearch = location.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           location.description?.toLowerCase().includes(searchQuery.toLowerCase())
+      const matchesType = selectedTypes.length === 0 || selectedTypes.includes(location.type)
+      return matchesSearch && matchesType
+    })
+  }, [locations, searchQuery, selectedTypes])
+
+  const toggleTypeFilter = (type: string) => {
+    setSelectedTypes(prev => 
+      prev.includes(type) 
+        ? prev.filter(t => t !== type)
+        : [...prev, type]
+    )
+  }
+
+  const clearFilters = () => {
+    setSearchQuery('')
+    setSelectedTypes([])
+  }
 
   const handleLocationClick = (locationId: number) => {
     setSelectedLocation(locationId)
@@ -91,16 +124,16 @@ export function CopenhagenMap() {
   if (!MapComponent || !TileLayer || !Marker || !Popup) {
     return (
       <div className="space-y-6 sm:space-y-8">
-        <div className="text-center py-6 sm:py-8">
+        <div className="text-center py-6 sm:py-8 animate-fade-in">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 bg-green-100 rounded-full">
-              <MapPin className="w-8 h-8 text-green-600" />
+            <div className="p-3 bg-green-100 dark:bg-green-900 rounded-full transition-colors duration-300">
+              <MapPin className="w-8 h-8 text-green-600 dark:text-green-400" />
             </div>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 transition-colors duration-300">
             Interactive Map
           </h2>
-          <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto transition-colors duration-300">
             Explore Copenhagen with your personal guide!
           </p>
         </div>
@@ -122,24 +155,110 @@ export function CopenhagenMap() {
 
   return (
     <div className="space-y-6 sm:space-y-8">
-      <div className="text-center py-6 sm:py-8">
+      <div className="text-center py-6 sm:py-8 animate-fade-in">
         <div className="flex items-center justify-center gap-3 mb-4">
-          <div className="p-3 bg-green-100 rounded-full">
-            <MapPin className="w-8 h-8 text-green-600" />
+          <div className="p-3 bg-green-100 dark:bg-green-900 rounded-full transition-colors duration-300">
+            <MapPin className="w-8 h-8 text-green-600 dark:text-green-400" />
           </div>
         </div>
-        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
+        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 transition-colors duration-300">
           Interactive Map
         </h2>
-        <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
+        <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto transition-colors duration-300">
           Explore Copenhagen with your personal guide!
         </p>
       </div>
 
-      <Card className="bg-white border border-gray-200 shadow-sm">
+      {/* Search and Filter Controls */}
+      <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm transition-all duration-300 animate-slide-up">
+        <CardContent className="p-4 sm:p-6">
+          <div className="space-y-4">
+            {/* Search Bar */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search locations..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              )}
+            </div>
+
+            {/* Filter Toggle */}
+            <div className="flex items-center justify-between">
+              <Button
+                onClick={() => setShowFilters(!showFilters)}
+                variant="outline"
+                className="flex items-center gap-2 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300"
+              >
+                <Filter className="w-4 h-4" />
+                Filters
+                {selectedTypes.length > 0 && (
+                  <Badge variant="secondary" className="ml-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
+                    {selectedTypes.length}
+                  </Badge>
+                )}
+              </Button>
+              
+              {(searchQuery || selectedTypes.length > 0) && (
+                <Button
+                  onClick={clearFilters}
+                  variant="ghost"
+                  size="sm"
+                  className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-200"
+                >
+                  Clear all
+                </Button>
+              )}
+            </div>
+
+            {/* Filter Options */}
+            {showFilters && (
+              <div className="space-y-3 animate-slide-up">
+                <h4 className="text-sm font-semibold text-gray-900 dark:text-white transition-colors duration-300">
+                  Filter by type:
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {availableTypes.map((type) => (
+                    <Button
+                      key={type}
+                      onClick={() => toggleTypeFilter(type)}
+                      variant={selectedTypes.includes(type) ? "default" : "outline"}
+                      size="sm"
+                      className={`transition-all duration-200 ${
+                        selectedTypes.includes(type)
+                          ? 'bg-green-600 hover:bg-green-700 text-white'
+                          : 'border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                      }`}
+                    >
+                      {type.charAt(0).toUpperCase() + type.slice(1)}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Results Count */}
+            <div className="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300">
+              Showing {filteredLocations.length} of {locations.length} locations
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm transition-all duration-300 animate-slide-up" style={{animationDelay: '0.1s'}}>
         <CardContent className="p-4 sm:p-6 space-y-6">
           {/* Map */}
-          <div className="h-64 sm:h-96 rounded-2xl overflow-hidden border-2 border-gray-200 shadow-sm">
+          <div className="h-64 sm:h-96 rounded-2xl overflow-hidden border-2 border-gray-200 dark:border-gray-600 shadow-sm transition-colors duration-300">
             <MapComponent
               key="copenhagen-map"
               center={mapConfig.center || [55.6761, 12.5683]}
@@ -151,7 +270,7 @@ export function CopenhagenMap() {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              {locations.filter(l => l.coordinates).map((location) => {
+              {filteredLocations.filter(l => l.coordinates).map((location) => {
                 const Icon = location.icon ? getIconComponent(location.icon.name) : MapPin
                 return (
                   <Marker key={location.id} position={location.coordinates as [number, number]}>
@@ -212,21 +331,21 @@ export function CopenhagenMap() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div>
               <div className="flex items-center gap-3 mb-4 sm:mb-6">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <MapPin className="w-5 h-5 text-blue-600" />
+                <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg transition-colors duration-300">
+                  <MapPin className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">Key Locations</h3>
+                <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">Key Locations</h3>
               </div>
               <div className="space-y-3 sm:space-y-4 max-h-96 overflow-y-auto">
-                {locations.map((location) => {
+                {filteredLocations.map((location) => {
                   const Icon = location.icon ? getIconComponent(location.icon.name) : MapPin
                   return (
                     <Card 
                       key={location.id} 
-                      className={`bg-white p-3 sm:p-4 rounded-xl border transition-all duration-200 cursor-pointer ${
+                      className={`bg-white dark:bg-gray-700 p-3 sm:p-4 rounded-xl border transition-all duration-300 cursor-pointer transform hover:scale-[1.02] ${
                         selectedLocation === location.id 
-                          ? 'border-blue-500 shadow-lg ring-2 ring-blue-200' 
-                          : 'border-gray-200 hover:shadow-md hover:border-gray-300'
+                          ? 'border-blue-500 dark:border-blue-400 shadow-lg ring-2 ring-blue-200 dark:ring-blue-800' 
+                          : 'border-gray-200 dark:border-gray-600 hover:shadow-md hover:border-gray-300 dark:hover:border-gray-500'
                       }`}
                       onClick={() => handleLocationClick(location.id)}
                     >
@@ -237,14 +356,14 @@ export function CopenhagenMap() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-2">
-                              <p className="font-semibold text-sm sm:text-base text-gray-900">{location.name}</p>
+                              <p className="font-semibold text-sm sm:text-base text-gray-900 dark:text-white transition-colors duration-300">{location.name}</p>
                               <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(location.type)}`}>
                                 {location.type}
                               </span>
                             </div>
-                            <p className="text-xs sm:text-sm text-gray-600 mb-3">{location.description}</p>
+                            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mb-3 transition-colors duration-300">{location.description}</p>
                             
-                            <div className="flex items-center gap-4 text-xs sm:text-sm text-gray-500 mb-3">
+                            <div className="flex items-center gap-4 text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-3 transition-colors duration-300">
                               {location.bestTime && (
                                 <div className="flex items-center gap-1">
                                   <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -266,17 +385,17 @@ export function CopenhagenMap() {
                             </div>
 
                             {location.tips && location.tips.length > 0 && (
-                              <div className="bg-gray-50 p-3 rounded-lg">
-                                <p className="text-xs font-semibold text-gray-800 mb-2">Quick Tips:</p>
-                                <ul className="text-xs text-gray-600 space-y-1">
+                              <div className="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg transition-colors duration-300">
+                                <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 mb-2 transition-colors duration-300">Quick Tips:</p>
+                                <ul className="text-xs text-gray-600 dark:text-gray-300 space-y-1 transition-colors duration-300">
                                   {location.tips.slice(0, 2).map((tip, index) => (
                                     <li key={index} className="flex items-start gap-1">
-                                      <span className="text-gray-500 mt-0.5">•</span>
+                                      <span className="text-gray-500 dark:text-gray-400 mt-0.5">•</span>
                                       <span className="line-clamp-1">{tip}</span>
                                     </li>
                                   ))}
                                   {location.tips.length > 2 && (
-                                    <li className="text-gray-600 text-xs font-medium">
+                                    <li className="text-gray-600 dark:text-gray-400 text-xs font-medium">
                                       +{location.tips.length - 2} more tips
                                     </li>
                                   )}

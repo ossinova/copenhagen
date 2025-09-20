@@ -46,30 +46,30 @@ export function WifiQR() {
   return (
     <div className="space-y-6 sm:space-y-8">
       {/* Hero Section */}
-      <div className="text-center py-6 sm:py-8">
+      <div className="text-center py-6 sm:py-8 animate-fade-in">
         <div className="flex items-center justify-center gap-3 mb-4">
-          <div className="p-3 bg-blue-100 rounded-full">
-            <Wifi className="w-8 h-8 text-blue-600" />
+          <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full transition-colors duration-300">
+            <Wifi className="w-8 h-8 text-blue-600 dark:text-blue-400" />
           </div>
         </div>
-        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
+        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 transition-colors duration-300">
           Get Connected!
         </h2>
-        <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
+        <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto transition-colors duration-300">
           Scan the QR code or use the details below to connect to WiFi
         </p>
       </div>
 
-      <Card className="bg-white border border-gray-200 shadow-sm">
+      <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300 transform hover:scale-[1.01] animate-slide-up">
         <CardContent className="p-4 sm:p-6 space-y-6 sm:space-y-8">
           {/* QR Code */}
           <div className="text-center">
             <div className="flex items-center justify-center gap-2 mb-4 sm:mb-6">
-              <Smartphone className="w-5 h-5 text-gray-600" />
-              <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">Scan to Connect</h3>
+              <Smartphone className="w-5 h-5 text-gray-600 dark:text-gray-400 transition-colors duration-300" />
+              <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">Scan to Connect</h3>
             </div>
             <div className="flex justify-center">
-              <div className="p-4 sm:p-6 bg-white rounded-2xl shadow-lg border-2 border-gray-200">
+              <div className="p-4 sm:p-6 bg-white dark:bg-gray-700 rounded-2xl shadow-lg border-2 border-gray-200 dark:border-gray-600 transition-all duration-300">
                 {qrCodeDataURL ? (
                   <img 
                     src={qrCodeDataURL} 
@@ -89,55 +89,55 @@ export function WifiQR() {
           </div>
 
           {/* Manual Connection Info */}
-          <div className="bg-gray-50 rounded-2xl p-4 sm:p-6 space-y-4 sm:space-y-6">
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-2xl p-4 sm:p-6 space-y-4 sm:space-y-6 transition-colors duration-300">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <WifiIcon className="w-5 h-5 text-gray-600" />
-              <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">Or connect manually</h3>
+              <WifiIcon className="w-5 h-5 text-gray-600 dark:text-gray-400 transition-colors duration-300" />
+              <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">Or connect manually</h3>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              <div className="bg-white p-4 sm:p-6 rounded-xl border border-gray-200">
+              <div className="bg-white dark:bg-gray-600 p-4 sm:p-6 rounded-xl border border-gray-200 dark:border-gray-500 transition-all duration-300 transform hover:scale-[1.02]">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-green-100 rounded-lg">
-                    <WifiIcon className="w-5 h-5 text-green-600" />
+                  <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg transition-colors duration-300">
+                    <WifiIcon className="w-5 h-5 text-green-600 dark:text-green-400" />
                   </div>
-                  <h4 className="text-lg font-semibold text-gray-900">Network Name</h4>
+                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">Network Name</h4>
                 </div>
-                <div className="bg-gray-50 p-3 sm:p-4 rounded-lg border border-gray-200">
-                  <p className="font-mono text-lg sm:text-xl font-bold text-gray-800">{wifiCredentials.ssid}</p>
+                <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg border border-gray-200 dark:border-gray-500 transition-colors duration-300">
+                  <p className="font-mono text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-200 transition-colors duration-300">{wifiCredentials.ssid}</p>
                 </div>
                 <Button
                   onClick={() => copyToClipboard(wifiCredentials.ssid)}
-                  className="w-full mt-4 bg-gray-900 hover:bg-gray-800 text-white rounded-lg"
+                  className="w-full mt-4 bg-gray-900 dark:bg-gray-700 hover:bg-gray-800 dark:hover:bg-gray-600 text-white rounded-lg transition-all duration-300 transform hover:scale-105"
                 >
                   {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
                   Copy Network Name
                 </Button>
               </div>
 
-              <div className="bg-white p-4 sm:p-6 rounded-xl border border-gray-200">
+              <div className="bg-white dark:bg-gray-600 p-4 sm:p-6 rounded-xl border border-gray-200 dark:border-gray-500 transition-all duration-300 transform hover:scale-[1.02]">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-purple-100 rounded-lg">
-                    <Shield className="w-5 h-5 text-purple-600" />
+                  <div className="p-2 bg-purple-100 dark:bg-purple-900 rounded-lg transition-colors duration-300">
+                    <Shield className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                   </div>
-                  <h4 className="text-lg font-semibold text-gray-900">Password</h4>
+                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">Password</h4>
                 </div>
-                <div className="bg-gray-50 p-3 sm:p-4 rounded-lg border border-gray-200">
-                  <p className="font-mono text-lg sm:text-xl font-bold text-gray-800">
+                <div className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-lg border border-gray-200 dark:border-gray-500 transition-colors duration-300">
+                  <p className="font-mono text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-200 transition-colors duration-300">
                     {showPassword ? wifiCredentials.password : '••••••••••••'}
                   </p>
                 </div>
                 <div className="flex gap-2 mt-4">
                   <Button
                     onClick={() => setShowPassword(!showPassword)}
-                    className="flex-1 bg-gray-900 hover:bg-gray-800 text-white rounded-lg"
+                    className="flex-1 bg-gray-900 dark:bg-gray-700 hover:bg-gray-800 dark:hover:bg-gray-600 text-white rounded-lg transition-all duration-300 transform hover:scale-105"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
                     {showPassword ? 'Hide' : 'Show'}
                   </Button>
                   <Button
                     onClick={() => copyToClipboard(wifiCredentials.password)}
-                    className="flex-1 bg-gray-900 hover:bg-gray-800 text-white rounded-lg"
+                    className="flex-1 bg-gray-900 dark:bg-gray-700 hover:bg-gray-800 dark:hover:bg-gray-600 text-white rounded-lg transition-all duration-300 transform hover:scale-105"
                   >
                     {copied ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
                     Copy
@@ -147,7 +147,7 @@ export function WifiQR() {
             </div>
 
             <div className="text-center">
-              <div className="inline-flex items-center gap-2 bg-gray-100 text-gray-800 px-4 py-2 rounded-full">
+              <div className="inline-flex items-center gap-2 bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-full transition-colors duration-300">
                 <Shield className="w-4 h-4" />
                 <span className="font-semibold text-sm sm:text-base">Security: {wifiCredentials.security}</span>
               </div>
@@ -155,40 +155,40 @@ export function WifiQR() {
           </div>
 
           {/* Instructions */}
-          <div className="bg-gray-50 rounded-2xl p-4 sm:p-6 border border-gray-200">
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-2xl p-4 sm:p-6 border border-gray-200 dark:border-gray-500 transition-colors duration-300">
             <div className="text-center mb-4 sm:mb-6">
               <div className="flex items-center justify-center gap-2 mb-3">
-                <Smartphone className="w-5 h-5 text-gray-600" />
-                <h4 className="text-lg sm:text-xl font-semibold text-gray-900">How to connect:</h4>
+                <Smartphone className="w-5 h-5 text-gray-600 dark:text-gray-400 transition-colors duration-300" />
+                <h4 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">How to connect:</h4>
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div className="space-y-3">
-                <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200">
-                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-bold text-blue-600">1</span>
+                <div className="flex items-center gap-3 p-3 bg-white dark:bg-gray-600 rounded-lg border border-gray-200 dark:border-gray-500 transition-all duration-300 transform hover:scale-[1.02]">
+                  <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center transition-colors duration-300">
+                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400">1</span>
                   </div>
-                  <p className="text-gray-700 font-medium text-sm sm:text-base">Open WiFi settings</p>
+                  <p className="text-gray-700 dark:text-gray-300 font-medium text-sm sm:text-base transition-colors duration-300">Open WiFi settings</p>
                 </div>
-                <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200">
-                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-bold text-blue-600">2</span>
+                <div className="flex items-center gap-3 p-3 bg-white dark:bg-gray-600 rounded-lg border border-gray-200 dark:border-gray-500 transition-all duration-300 transform hover:scale-[1.02]">
+                  <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center transition-colors duration-300">
+                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400">2</span>
                   </div>
-                  <p className="text-gray-700 font-medium text-sm sm:text-base">Scan QR code with camera</p>
+                  <p className="text-gray-700 dark:text-gray-300 font-medium text-sm sm:text-base transition-colors duration-300">Scan QR code with camera</p>
                 </div>
               </div>
               <div className="space-y-3">
-                <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200">
-                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-bold text-blue-600">3</span>
+                <div className="flex items-center gap-3 p-3 bg-white dark:bg-gray-600 rounded-lg border border-gray-200 dark:border-gray-500 transition-all duration-300 transform hover:scale-[1.02]">
+                  <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center transition-colors duration-300">
+                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400">3</span>
                   </div>
-                  <p className="text-gray-700 font-medium text-sm sm:text-base">Or select network manually</p>
+                  <p className="text-gray-700 dark:text-gray-300 font-medium text-sm sm:text-base transition-colors duration-300">Or select network manually</p>
                 </div>
-                <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200">
-                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-bold text-blue-600">4</span>
+                <div className="flex items-center gap-3 p-3 bg-white dark:bg-gray-600 rounded-lg border border-gray-200 dark:border-gray-500 transition-all duration-300 transform hover:scale-[1.02]">
+                  <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center transition-colors duration-300">
+                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400">4</span>
                   </div>
-                  <p className="text-gray-700 font-medium text-sm sm:text-base">Enter password & connect!</p>
+                  <p className="text-gray-700 dark:text-gray-300 font-medium text-sm sm:text-base transition-colors duration-300">Enter password & connect!</p>
                 </div>
               </div>
             </div>
