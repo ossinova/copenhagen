@@ -110,15 +110,15 @@ export function CopenhagenMap() {
 
   const getTypeColor = (type: string) => {
     const colors: Record<string, string> = {
-      attraction: 'bg-blue-100 text-blue-800',
-      shopping: 'bg-pink-100 text-pink-800',
-      food: 'bg-orange-100 text-orange-800',
-      cafe: 'bg-yellow-100 text-yellow-800',
-      home: 'bg-red-100 text-red-800',
-      nature: 'bg-green-100 text-green-800',
-      museum: 'bg-purple-100 text-purple-800',
+      attraction: 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200',
+      shopping: 'bg-pink-100 dark:bg-pink-900 text-pink-800 dark:text-pink-200',
+      food: 'bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200',
+      cafe: 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200',
+      home: 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200',
+      nature: 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200',
+      museum: 'bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200',
     }
-    return colors[type] || 'bg-gray-100 text-gray-800'
+    return colors[type] || 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
   }
 
   if (!MapComponent || !TileLayer || !Marker || !Popup) {
@@ -138,13 +138,13 @@ export function CopenhagenMap() {
           </p>
         </div>
 
-        <Card className="bg-white border border-gray-200 shadow-sm">
+        <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm transition-colors duration-300">
           <CardContent className="p-4 sm:p-6">
-            <div className="h-64 sm:h-96 bg-gray-100 rounded-2xl flex items-center justify-center border-2 border-gray-200 shadow-sm">
+            <div className="h-64 sm:h-96 bg-gray-100 dark:bg-gray-700 rounded-2xl flex items-center justify-center border-2 border-gray-200 dark:border-gray-600 shadow-sm transition-colors duration-300">
               <div className="text-center">
-                <div className="animate-spin rounded-full h-8 w-8 sm:h-12 sm:w-12 border-b-2 border-gray-600 mx-auto mb-3 sm:mb-4"></div>
-                <div className="text-gray-600 font-medium text-sm sm:text-base">Loading interactive map...</div>
-                <div className="text-xs sm:text-sm text-gray-500 mt-2">This may take a moment</div>
+                <div className="animate-spin rounded-full h-8 w-8 sm:h-12 sm:w-12 border-b-2 border-gray-600 dark:border-gray-400 mx-auto mb-3 sm:mb-4"></div>
+                <div className="text-gray-600 dark:text-gray-300 font-medium text-sm sm:text-base transition-colors duration-300">Loading interactive map...</div>
+                <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-2 transition-colors duration-300">This may take a moment</div>
               </div>
             </div>
           </CardContent>
@@ -329,14 +329,14 @@ export function CopenhagenMap() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div>
+            <div className="flex flex-col">
               <div className="flex items-center gap-3 mb-4 sm:mb-6">
                 <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg transition-colors duration-300">
                   <MapPin className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 </div>
                 <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">Key Locations</h3>
               </div>
-              <div className="space-y-3 sm:space-y-4 max-h-96 overflow-y-auto">
+              <div className="space-y-3 sm:space-y-4">
                 {filteredLocations.map((location) => {
                   const Icon = location.icon ? getIconComponent(location.icon.name) : MapPin
                   return (
@@ -411,26 +411,26 @@ export function CopenhagenMap() {
               </div>
             </div>
 
-            <div>
+            <div className="flex flex-col">
               <div className="flex items-center gap-3 mb-4 sm:mb-6">
-                <div className="p-2 bg-purple-100 rounded-lg">
-                  <Info className="w-5 h-5 text-purple-600" />
+                <div className="p-2 bg-purple-100 dark:bg-purple-900 rounded-lg transition-colors duration-300">
+                  <Info className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">Smart Travel Tips</h3>
+                <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">Smart Travel Tips</h3>
               </div>
               <div className="space-y-3 sm:space-y-4">
                 {guestConfig.host.practicalTips?.map((category, index) => {
                   const Icon = getIconComponent(category.icon)
                   return (
-                    <div key={index} className="bg-gray-50 p-3 sm:p-4 rounded-xl border border-gray-200">
+                    <div key={index} className="bg-gray-50 dark:bg-gray-700 p-3 sm:p-4 rounded-xl border border-gray-200 dark:border-gray-600 transition-colors duration-300">
                       <div className="flex items-center gap-3 mb-3">
-                        <Icon className="w-5 h-5 text-gray-600" />
-                        <h4 className="font-semibold text-gray-900 text-sm sm:text-base">{category.category}</h4>
+                        <Icon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        <h4 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base transition-colors duration-300">{category.category}</h4>
                       </div>
-                      <ul className="text-sm text-gray-800 space-y-2">
+                      <ul className="text-sm text-gray-800 dark:text-gray-200 space-y-2 transition-colors duration-300">
                         {category.tips.map((tip, tipIndex) => (
                           <li key={tipIndex} className="flex items-start gap-2">
-                            <span className="text-gray-500 mt-1">•</span>
+                            <span className="text-gray-500 dark:text-gray-400 mt-1">•</span>
                             {tip}
                           </li>
                         ))}
