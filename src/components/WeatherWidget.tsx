@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Cloud, Sun, CloudRain, CloudSnow, Wind, Droplets, Thermometer, Eye, Sunrise, Sunset } from 'lucide-react'
+import { Cloud, Sun, CloudRain, CloudSnow, Wind, Droplets, Eye, Sunrise } from 'lucide-react'
 
 interface WeatherData {
   temperature: number

@@ -336,7 +336,7 @@ export function CopenhagenMap() {
                 </div>
                 <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">Key Locations</h3>
               </div>
-              <div className="space-y-3 sm:space-y-4">
+              <div className="space-y-3 sm:space-y-4 max-h-96 overflow-y-auto">
                 {filteredLocations.map((location) => {
                   const Icon = location.icon ? getIconComponent(location.icon.name) : MapPin
                   return (
@@ -418,7 +418,7 @@ export function CopenhagenMap() {
                 </div>
                 <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">Smart Travel Tips</h3>
               </div>
-              <div className="space-y-3 sm:space-y-4">
+              <div className="space-y-3 sm:space-y-4 max-h-96 overflow-y-auto">
                 {guestConfig.host.practicalTips?.map((category, index) => {
                   const Icon = getIconComponent(category.icon)
                   return (

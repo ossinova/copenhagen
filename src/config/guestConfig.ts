@@ -98,14 +98,40 @@ export type ExploreConfig = {
   drinks: { name: string; description?: string; emoji?: string; tip?: string }[]
 }
 
+export type EventItem = {
+  id: string
+  title: string
+  description: string
+  date: string
+  time: string
+  location: string
+  category: 'music' | 'food' | 'culture' | 'sports' | 'nightlife' | 'family' | 'free' | 'paid'
+  price?: string
+  url?: string
+  isRecurring?: boolean
+  recurringPattern?: string
+}
+
+export type EventsConfig = {
+  staticEvents: EventItem[]
+  apiConfig?: {
+    meetupApiKey?: string
+    eventbriteToken?: string
+    facebookAppId?: string
+  }
+}
+
 export type GuestConfig = {
+  lastUpdated: string
   host: HostInfo
   wifi: WifiInfo
   map: MapConfig
   explore: ExploreConfig
+  events: EventsConfig
 }
 
 export const guestConfig: GuestConfig = {
+  lastUpdated: new Date().toISOString(),
   host: {
     houseName: 'Kaktus Towers',
     addressLine1: 'Dybbølsbro 3',
@@ -526,4 +552,233 @@ export const guestConfig: GuestConfig = {
       { name: 'Æblekageshot', description: 'Apple pie shot' },
     ],
   },
+  events: {
+    staticEvents: [
+      {
+        id: 'tivoli-concerts',
+        title: 'Tivoli Gardens Concerts',
+        description: 'Live music performances in the magical Tivoli Gardens',
+        date: 'Various dates',
+        time: 'Evening shows',
+        location: 'Tivoli Gardens, Copenhagen',
+        category: 'music',
+        price: 'Included with Tivoli ticket',
+        isRecurring: true,
+        recurringPattern: 'Weekly during summer season'
+      },
+      {
+        id: 'nyhavn-canal-tours',
+        title: 'Canal Tours from Nyhavn',
+        description: 'Scenic boat tours through Copenhagen canals',
+        date: 'Daily',
+        time: '10:00 - 18:00',
+        location: 'Nyhavn Harbor',
+        category: 'culture',
+        price: 'DKK 80-120',
+        isRecurring: true,
+        recurringPattern: 'Daily'
+      },
+      {
+        id: 'christiania-walking-tour',
+        title: 'Freetown Christiania Walking Tour',
+        description: 'Guided tours of the alternative neighborhood',
+        date: 'Daily',
+        time: '14:00 & 16:00',
+        location: 'Freetown Christiania',
+        category: 'free',
+        price: 'Free (tips appreciated)',
+        isRecurring: true,
+        recurringPattern: 'Daily'
+      },
+      {
+        id: 'torvehallerne-food-market',
+        title: 'Torvehallerne Food Market',
+        description: 'Modern food market with local delicacies and international cuisine',
+        date: 'Daily',
+        time: '10:00 - 19:00 (Mon-Thu), 10:00 - 20:00 (Fri-Sat), 11:00 - 17:00 (Sun)',
+        location: 'Torvehallerne, Israels Plads',
+        category: 'food',
+        price: 'Varies',
+        isRecurring: true,
+        recurringPattern: 'Daily'
+      },
+      {
+        id: 'rosenborg-castle-tour',
+        title: 'Rosenborg Castle & Crown Jewels',
+        description: 'Tour the Renaissance castle and see the Danish crown jewels',
+        date: 'Daily',
+        time: '10:00 - 16:00 (winter), 10:00 - 17:00 (summer)',
+        location: 'Rosenborg Castle',
+        category: 'culture',
+        price: 'DKK 130',
+        isRecurring: true,
+        recurringPattern: 'Daily'
+      },
+      {
+        id: 'round-tower-views',
+        title: 'Round Tower Observatory',
+        description: 'Climb the 17th-century tower for panoramic city views',
+        date: 'Daily',
+        time: '10:00 - 20:00',
+        location: 'Round Tower, Købmagergade',
+        category: 'culture',
+        price: 'DKK 40',
+        isRecurring: true,
+        recurringPattern: 'Daily'
+      },
+      {
+        id: 'national-museum-free-wednesday',
+        title: 'National Museum - Free Wednesday',
+        description: 'Free entry to Denmark\'s largest cultural history museum',
+        date: 'Every Wednesday',
+        time: '10:00 - 17:00',
+        location: 'National Museum of Denmark',
+        category: 'free',
+        price: 'Free',
+        isRecurring: true,
+        recurringPattern: 'Weekly on Wednesday'
+      },
+      {
+        id: 'amalienborg-guard-changing',
+        title: 'Changing of the Guard Ceremony',
+        description: 'Watch the royal guard ceremony at Amalienborg Palace',
+        date: 'Daily',
+        time: '12:00',
+        location: 'Amalienborg Palace Square',
+        category: 'free',
+        price: 'Free',
+        isRecurring: true,
+        recurringPattern: 'Daily'
+      },
+      {
+        id: 'reffen-street-food',
+        title: 'Reffen Street Food Market',
+        description: 'Outdoor street food market by the water with international cuisine',
+        date: 'Wed-Sun',
+        time: '12:00 - 21:00 (Wed-Thu), 12:00 - 22:00 (Fri-Sat), 12:00 - 21:00 (Sun)',
+        location: 'Reffen, Refshalevej',
+        category: 'food',
+        price: 'DKK 80-150',
+        isRecurring: true,
+        recurringPattern: 'Wed-Sun'
+      },
+      {
+        id: 'copenhagen-zoo',
+        title: 'Copenhagen Zoo',
+        description: 'One of Europe\'s oldest zoos with over 3,000 animals',
+        date: 'Daily',
+        time: '10:00 - 16:00 (winter), 10:00 - 18:00 (summer)',
+        location: 'Copenhagen Zoo, Roskildevej',
+        category: 'family',
+        price: 'DKK 195',
+        isRecurring: true,
+        recurringPattern: 'Daily'
+      },
+      {
+        id: 'strøget-shopping-street',
+        title: 'Strøget Shopping Street',
+        description: 'Europe\'s longest pedestrian shopping street - perfect for window shopping',
+        date: 'Daily',
+        time: '10:00 - 20:00 (shops), always open (street)',
+        location: 'Strøget, from Rådhuspladsen to Kongens Nytorv',
+        category: 'free',
+        price: 'Free to walk',
+        isRecurring: true,
+        recurringPattern: 'Daily'
+      },
+      {
+        id: 'assistens-cemetery',
+        title: 'Assistens Cemetery',
+        description: 'Peaceful park and cemetery where Hans Christian Andersen is buried',
+        date: 'Daily',
+        time: '07:00 - 22:00',
+        location: 'Assistens Cemetery, Nørrebro',
+        category: 'free',
+        price: 'Free',
+        isRecurring: true,
+        recurringPattern: 'Daily'
+      },
+      {
+        id: 'superkilen-park',
+        title: 'Superkilen Park',
+        description: 'Colorful urban park showcasing international design elements',
+        date: 'Daily',
+        time: '24/7',
+        location: 'Superkilen, Nørrebrogade',
+        category: 'free',
+        price: 'Free',
+        isRecurring: true,
+        recurringPattern: 'Daily'
+      },
+      {
+        id: 'copenhagen-free-walking-tours',
+        title: 'Free Walking Tours',
+        description: 'Guided walking tours through Copenhagen\'s historic center',
+        date: 'Daily',
+        time: '11:00 & 15:00',
+        location: 'Meeting point: City Hall Square',
+        category: 'free',
+        price: 'Free (tips appreciated)',
+        isRecurring: true,
+        recurringPattern: 'Daily'
+      },
+      {
+        id: 'copenhagen-bike-tours',
+        title: 'Copenhagen Bike Tours',
+        description: 'Explore Copenhagen like a local on guided bike tours',
+        date: 'Daily',
+        time: '10:00 & 14:00',
+        location: 'Various starting points',
+        category: 'sports',
+        price: 'DKK 200-300',
+        isRecurring: true,
+        recurringPattern: 'Daily'
+      },
+      {
+        id: 'copenhagen-food-tours',
+        title: 'Copenhagen Food Tours',
+        description: 'Taste traditional Danish cuisine and local specialties',
+        date: 'Daily',
+        time: '12:00 & 18:00',
+        location: 'Various locations',
+        category: 'food',
+        price: 'DKK 400-600',
+        isRecurring: true,
+        recurringPattern: 'Daily'
+      },
+      {
+        id: 'copenhagen-harbor-bus',
+        title: 'Harbor Bus (Havnebussen)',
+        description: 'Public transport boat connecting different parts of the harbor',
+        date: 'Daily',
+        time: '06:00 - 20:00',
+        location: 'Various harbor stops',
+        category: 'culture',
+        price: 'DKK 24 (same as bus ticket)',
+        isRecurring: true,
+        recurringPattern: 'Daily'
+      },
+      {
+        id: 'copenhagen-nightlife-tours',
+        title: 'Copenhagen Nightlife Tours',
+        description: 'Explore Copenhagen\'s vibrant nightlife scene',
+        date: 'Fri-Sat',
+        time: '20:00',
+        location: 'Various bars and clubs',
+        category: 'nightlife',
+        price: 'DKK 300-500',
+        isRecurring: true,
+        recurringPattern: 'Fri-Sat'
+      }
+    ],
+    apiConfig: {
+      // Meetup API key for live events (more reliable than Eventbrite)
+      // Get your free API key at: https://www.meetup.com/meetup_api/key/
+      meetupApiKey: import.meta.env.VITE_MEETUP_API_KEY,
+      // Eventbrite API token (backup)
+      eventbriteToken: import.meta.env.VITE_EVENTBRITE_TOKEN,
+      // Facebook App ID for events
+      facebookAppId: import.meta.env.VITE_FACEBOOK_APP_ID
+    }
+  }
 }

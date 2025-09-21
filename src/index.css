@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
+:root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -70,7 +70,36 @@
 
 @layer utilities {
   /* Custom animations */
-  @keyframes fade-in {
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out;
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .animate-pulse-glow {
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideUp {
     from {
       opacity: 0;
       transform: translateY(20px);
@@ -80,41 +109,8 @@
       transform: translateY(0);
     }
   }
-
-  @keyframes slide-up {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes slide-in-left {
-    from {
-      opacity: 0;
-      transform: translateX(-30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  @keyframes slide-in-right {
-    from {
-      opacity: 0;
-      transform: translateX(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  @keyframes scale-in {
+  
+  @keyframes scaleIn {
     from {
       opacity: 0;
       transform: scale(0.9);
@@ -124,25 +120,65 @@
       transform: scale(1);
     }
   }
-
-  .animate-fade-in {
-    animation: fade-in 0.6s ease-out forwards;
+  
+  @keyframes pulseGlow {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+    }
+    50% {
+      opacity: 0.9;
+      transform: scale(1.05);
+      box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.1);
+    }
   }
-
-  .animate-slide-up {
-    animation: slide-up 0.6s ease-out forwards;
+  
+  /* Improved text styles */
+  .text-balance {
+    text-wrap: balance;
   }
-
-  .animate-slide-in-left {
-    animation: slide-in-left 0.6s ease-out forwards;
+  
+  /* Better focus states */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900;
   }
-
-  .animate-slide-in-right {
-    animation: slide-in-right 0.6s ease-out forwards;
+  
+  /* Subtle shadows */
+  .shadow-soft {
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   }
-
-  .animate-scale-in {
-    animation: scale-in 0.4s ease-out forwards;
+  
+  .shadow-soft-lg {
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.06), 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+  }
+  
+  /* Better gradients */
+  .gradient-subtle {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  }
+  
+  /* Improved card styles */
+  .card-hover {
+    @apply transition-all duration-300 ease-out hover:shadow-soft-lg hover:-translate-y-1;
+  }
+  
+  /* Better button styles */
+  .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg transition-all duration-200 focus-ring;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100 font-medium px-4 py-2 rounded-lg transition-all duration-200 focus-ring;
+  }
+  
+  /* Improved spacing */
+  .space-y-refined > * + * {
+    margin-top: 1.5rem;
+  }
+  
+  .space-y-tight > * + * {
+    margin-top: 0.75rem;
   }
 
   /* Smooth transitions for theme switching */
@@ -150,5 +186,117 @@
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 300ms;
+  }
+
+  /* Print styles */
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+    
+    body {
+      background: white !important;
+      color: black !important;
+    }
+    
+    .dark {
+      background: white !important;
+      color: black !important;
+    }
+    
+    nav, footer {
+      display: none !important;
+    }
+    
+    .shadow-sm, .shadow-md, .shadow-lg {
+      box-shadow: none !important;
+    }
+    
+    .bg-gray-50, .bg-gray-100, .bg-gray-200 {
+      background: white !important;
+    }
+    
+    .text-gray-500, .text-gray-600, .text-gray-700 {
+      color: black !important;
+    }
+    
+    .border-gray-200, .border-gray-300 {
+      border-color: #ccc !important;
+    }
+    
+    .rounded-lg, .rounded-xl {
+      border-radius: 4px !important;
+    }
+    
+    .p-4, .p-6 {
+      padding: 16px !important;
+    }
+    
+    .mb-4, .mb-6 {
+      margin-bottom: 16px !important;
+    }
+    
+    .space-y-4 > * + * {
+      margin-top: 16px !important;
+    }
+    
+    .space-y-6 > * + * {
+      margin-top: 24px !important;
+    }
+    
+    .grid {
+      display: block !important;
+    }
+    
+    .grid > * {
+      margin-bottom: 16px !important;
+    }
+    
+    .max-h-96 {
+      max-height: none !important;
+    }
+    
+    .overflow-y-auto {
+      overflow: visible !important;
+    }
+    
+    /* Ensure QR codes and images print well */
+    img {
+      max-width: 100% !important;
+      height: auto !important;
+    }
+    
+    /* Make sure text is readable */
+    .text-xs {
+      font-size: 12px !important;
+    }
+    
+    .text-sm {
+      font-size: 14px !important;
+    }
+    
+    .text-base {
+      font-size: 16px !important;
+    }
+    
+    .text-lg {
+      font-size: 18px !important;
+    }
+    
+    .text-xl {
+      font-size: 20px !important;
+    }
+    
+    .text-2xl {
+      font-size: 24px !important;
+    }
+    
+    .text-3xl {
+      font-size: 28px !important;
+    }
+    
+    .text-4xl {
+      font-size: 32px !important;
+    }
   }
 }

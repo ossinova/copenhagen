@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react'
 import { Cloud, Sun, CloudRain, CloudSnow, Wind } from 'lucide-react'
+import { WeatherService, type WeatherData } from '@/services/weatherService'
 
 interface WeatherCardProps {
   variant?: 'header' | 'card'
@@ -6,12 +8,48 @@ interface WeatherCardProps {
 }
 
 export function WeatherCard({ variant = 'card', className = '' }: WeatherCardProps) {
-  // Simplified weather data for now to fix the blank page issue
-  const weather = {
-    temperature: 12,
-    condition: 'Partly Cloudy',
-    icon: 'cloud-sun',
-    description: 'Perfect for exploring!'
+  const [weather, setWeather] = useState<WeatherData | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        const weatherService = WeatherService.getInstance()
+        const weatherData = await weatherService.getWeather()
+        setWeather(weatherData)
+      } catch (error) {
+        console.error('Failed to fetch weather:', error)
+        // Fallback to default weather
+        setWeather({
+          temperature: 12,
+          condition: 'Partly Cloudy',
+          icon: 'cloud-sun',
+          description: 'Perfect for exploring!'
+        })
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchWeather()
+  }, [])
+
+  if (loading || !weather) {
+    return (
+      <div className={`${className} animate-pulse`}>
+        {variant === 'header' ? (
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="w-8 h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
+          </div>
+        ) : (
+          <div className="text-center">
+            <div className="w-16 h-6 bg-gray-200 dark:bg-gray-700 rounded mx-auto mb-2"></div>
+            <div className="w-20 h-4 bg-gray-200 dark:bg-gray-700 rounded mx-auto"></div>
+          </div>
+        )}
+      </div>
+    )
   }
 
   const getWeatherIcon = (icon: string, size: 'sm' | 'md' | 'lg' = 'md') => {

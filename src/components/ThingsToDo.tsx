@@ -24,7 +24,7 @@ export function ThingsToDo() {
 
       {/* Categories */}
       {categories.map((category, categoryIndex) => (
-        <Card key={category.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300 transform hover:scale-[1.01] animate-slide-up" style={{animationDelay: `${categoryIndex * 0.1}s`}}>
+        <Card key={category.id} className="bg-white dark:bg-gray-800 border border-gray-200/50 dark:border-gray-700/50 shadow-soft card-hover animate-slide-up" style={{animationDelay: `${categoryIndex * 0.1}s`}}>
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center gap-3 mb-4 sm:mb-6">
               <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg transition-colors duration-300">

@@ -1,26 +1,24 @@
 # Weather Service
 
-This service provides consistent weather data across the application.
+This service provides consistent weather data across the application using WeatherAPI.com.
 
 ## Current Implementation
 
-Currently uses mock data for demonstration purposes. The weather data is consistent between the header and home page cards.
+Uses WeatherAPI.com for real weather data with fallback to mock data when no API key is provided.
 
 ## To Integrate Real Weather API
 
-1. **Get API Key**: Sign up for a free API key from [OpenWeatherMap](https://openweathermap.org/api)
+1. **Get API Key**: Sign up for a free API key from [WeatherAPI.com](https://www.weatherapi.com/)
+   - **No credit card required!**
+   - Free tier: 1 million calls per month
+   - Current weather, forecast, and historical data
 
 2. **Set Environment Variable**: Add your API key to your environment:
    ```bash
-   VITE_WEATHER_API_KEY=your_api_key_here
+   VITE_WEATHER_API_KEY=your_weatherapi_key_here
    ```
 
-3. **Update WeatherService**: Uncomment the real API implementation in `weatherService.ts` and update the API_KEY constant:
-   ```typescript
-   const API_KEY = import.meta.env.VITE_WEATHER_API_KEY
-   ```
-
-4. **Enable Real API**: Uncomment the `getWeatherFromAPI()` method and update the `getWeather()` method to use it instead of mock data.
+3. **The service automatically detects your API key** and switches from mock data to real data.
 
 ## Features
 

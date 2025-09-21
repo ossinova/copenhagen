@@ -1,21 +1,69 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+import QRCode from 'qrcode'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { WifiQR } from './components/WifiQR'
 import { CopenhagenMap } from './components/CopenhagenMap'
 import { ThingsToDo } from './components/ThingsToDo'
 import { PracticalInfo } from './components/PracticalInfo'
-import { MapPin, Wifi, Home, Compass, Info, ArrowRight, MapPin as LocationIcon, Phone, Clock, Shield, Moon, Sun, Menu, X } from 'lucide-react'
+import { Events } from './components/Events'
+import { MapPin, Wifi, Home, Compass, Info, ArrowRight, MapPin as LocationIcon, Phone, Clock, Shield, Moon, Sun, Menu, X, Share2, Printer, Smartphone, ChevronUp, Calendar, Play } from 'lucide-react'
 import { guestConfig } from '@/config/guestConfig'
 import { AboutHost } from '@/components/AboutHost'
-import { WeatherWidget } from '@/components/WeatherWidget'
 import { HeaderWeather } from '@/components/HeaderWeather'
 import { WeatherCard } from '@/components/WeatherCard'
+import { VideoModal } from '@/components/VideoModal'
 
 function App() {
   const [activeTab, setActiveTab] = useState('home')
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [showBackToTop, setShowBackToTop] = useState(false)
+  const [pageQRCode, setPageQRCode] = useState<string>('')
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
+
+  // Quick action functions
+  const handleCallHost = useCallback(() => {
+    window.open(`tel:${guestConfig.host.phone}`, '_self')
+  }, [])
+
+  const handleOpenMaps = useCallback(() => {
+    window.open('https://maps.app.goo.gl/AwjWeKmotS8WzKib6', '_blank')
+  }, [])
+
+  const handleSharePage = useCallback(async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Copenhagen Couchsurfing Guide',
+          text: 'Check out this amazing guide for staying in Copenhagen!',
+          url: window.location.href,
+        })
+      } catch (err) {
+        console.log('Error sharing:', err)
+      }
+    } else {
+      // Fallback: copy to clipboard
+      navigator.clipboard.writeText(window.location.href)
+      alert('Link copied to clipboard!')
+    }
+  }, [])
+
+  const handleSaveToHomeScreen = useCallback(() => {
+    alert('To save this page to your home screen:\n\n• On iPhone: Tap the Share button, then "Add to Home Screen"\n• On Android: Tap the menu (⋮) and select "Add to Home Screen"')
+  }, [])
+
+  const handlePrintPage = useCallback(() => {
+    window.print()
+  }, [])
+
+  const scrollToTop = useCallback(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }, [])
+
 
   // Dark mode persistence and initialization
   useEffect(() => {
@@ -55,7 +103,7 @@ function App() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [isMobileMenuOpen])
 
-  const toggleDarkMode = () => {
+  const toggleDarkMode = useCallback(() => {
     const newMode = !isDarkMode
     setIsDarkMode(newMode)
     
@@ -66,13 +114,91 @@ function App() {
       document.documentElement.classList.remove('dark')
       localStorage.setItem('copenhagen-theme', 'light')
     }
-  }
+  }, [isDarkMode])
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      // Only trigger shortcuts if not typing in an input field
+      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+        return
+      }
+
+      switch (event.key.toLowerCase()) {
+        case 'h':
+          setActiveTab('home')
+          break
+        case 'w':
+          setActiveTab('wifi')
+          break
+        case 'm':
+          setActiveTab('map')
+          break
+        case 'e':
+          setActiveTab('explore')
+          break
+        case 'v':
+          setActiveTab('events')
+          break
+        case 't':
+          setActiveTab('tips')
+          break
+        case 'd':
+          toggleDarkMode()
+          break
+        case 'p':
+          handlePrintPage()
+          break
+        case 's':
+          handleSharePage()
+          break
+        case '?':
+          alert('Keyboard Shortcuts:\n\nH - Home\nW - WiFi\nM - Map\nE - Explore\nV - Events\nT - Tips\nD - Dark Mode\nP - Print\nS - Share\n? - Show this help')
+          break
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyPress)
+    return () => window.removeEventListener('keydown', handleKeyPress)
+  }, [toggleDarkMode, handlePrintPage, handleSharePage])
+
+  // Scroll detection for back to top button
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 300)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Generate QR code for the page
+  useEffect(() => {
+    const generatePageQR = async () => {
+      try {
+        const qrCodeDataURL = await QRCode.toDataURL(window.location.href, {
+          width: 128,
+          margin: 2,
+          color: {
+            dark: '#000000',
+            light: '#FFFFFF'
+          }
+        })
+        setPageQRCode(qrCodeDataURL)
+      } catch (error) {
+        console.error('Error generating page QR code:', error)
+      }
+    }
+
+    generatePageQR()
+  }, [])
 
   const tabs = [
     { id: 'home', label: 'Home', icon: Home },
     { id: 'wifi', label: 'WiFi', icon: Wifi },
     { id: 'map', label: 'Map', icon: MapPin },
     { id: 'explore', label: 'Explore', icon: Compass },
+    { id: 'events', label: 'Events', icon: Calendar },
     { id: 'tips', label: 'Tips', icon: Info },
   ]
 
@@ -81,17 +207,24 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       {/* Navigation Bar */}
-      <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50 shadow-sm transition-colors duration-300">
+      <nav className="no-print bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200/50 dark:border-gray-700/50 sticky top-0 z-50 shadow-soft transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Left side - Brand */}
             <div className="flex items-center gap-4">
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white transition-colors duration-300">
-                Copenhagen
-              </h1>
-              <span className="hidden md:inline text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
-                Your home away from home
-              </span>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-full flex items-center justify-center shadow-soft">
+                  <span className="text-white font-bold text-sm">CS</span>
+                </div>
+                <div className="flex flex-col">
+                  <h1 className="text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-300 leading-tight">
+                    Copenhagen CS
+                  </h1>
+                  <span className="hidden md:inline text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">
+                    Your home away from home
+                  </span>
+                </div>
+              </div>
             </div>
 
             {/* Center - Navigation Links (Desktop) */}
@@ -104,10 +237,10 @@ function App() {
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     variant={isActive ? "default" : "ghost"}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 focus-ring ${
                       isActive
-                        ? 'bg-gray-900 dark:bg-gray-700 text-white shadow-sm'
-                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-soft'
+                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100/80 dark:hover:bg-gray-700/80 hover:text-gray-900 dark:hover:text-white'
                     }`}
                   >
                     <Icon className="w-4 h-4" />
@@ -140,7 +273,7 @@ function App() {
                   />
                 </button>
                 <Moon className="w-4 h-4 text-gray-400 dark:text-gray-500 transition-colors duration-300" />
-              </div>
+      </div>
 
               {/* Mobile menu button */}
               <button
@@ -152,7 +285,7 @@ function App() {
                 ) : (
                   <Menu className="w-5 h-5" />
                 )}
-              </button>
+        </button>
             </div>
           </div>
 
@@ -204,11 +337,11 @@ function App() {
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto transition-colors duration-300">
                 {host.addressLine1}, {host.addressLine2 ? `${host.addressLine2}, ` : ''}{host.postalCode} {host.city}
-              </p>
-            </div>
+        </p>
+      </div>
 
             {/* Home Image with Arrow */}
-            <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-lg transform hover:scale-[1.02] animate-slide-up">
+            <Card className="bg-white dark:bg-gray-800 border border-gray-200/50 dark:border-gray-700/50 shadow-soft overflow-hidden card-hover animate-slide-up">
               <CardContent className="p-0">
                 <div className="relative">
                   <img 
@@ -226,7 +359,16 @@ function App() {
                         <span className="text-lg sm:text-xl font-semibold">Your Stay!</span>
                         <ArrowRight className="w-5 h-5" />
                       </div>
-                      <p className="text-sm sm:text-base opacity-90">{host.houseName || 'Home'} — {host.addressLine1}, {host.city}</p>
+                      <p className="text-sm sm:text-base opacity-90 mb-4">{host.houseName || 'Home'} — {host.addressLine1}, {host.city}</p>
+                      
+                      {/* Get Started Button */}
+                      <Button
+                        onClick={() => setIsVideoModalOpen(true)}
+                        className="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 text-white font-semibold px-6 py-3 rounded-full transition-all duration-300 hover:scale-105 focus-ring animate-pulse-glow shadow-lg"
+                      >
+                        <Play className="w-5 h-5 mr-2" />
+                        Get Started
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -240,7 +382,7 @@ function App() {
                 {/* Top Row - Key Info Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {/* Location Card */}
-                  <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300 transform hover:scale-105 animate-slide-up" style={{animationDelay: '0.1s'}}>
+                  <Card className="bg-white dark:bg-gray-800 border border-gray-200/50 dark:border-gray-700/50 shadow-soft card-hover animate-slide-up" style={{animationDelay: '0.1s'}}>
                     <CardContent className="p-6">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-xl transition-colors duration-300">
@@ -260,7 +402,7 @@ function App() {
                   </Card>
 
                   {/* Getting Here Card */}
-                  <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300 transform hover:scale-105 animate-slide-up" style={{animationDelay: '0.2s'}}>
+                  <Card className="bg-white dark:bg-gray-800 border border-gray-200/50 dark:border-gray-700/50 shadow-soft card-hover animate-slide-up" style={{animationDelay: '0.2s'}}>
                     <CardContent className="p-6">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="p-3 bg-green-100 dark:bg-green-900 rounded-xl transition-colors duration-300">
@@ -279,7 +421,7 @@ function App() {
                   </Card>
 
                   {/* Weather Card */}
-                  <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300 transform hover:scale-105 animate-slide-up" style={{animationDelay: '0.3s'}}>
+                  <Card className="bg-white dark:bg-gray-800 border border-gray-200/50 dark:border-gray-700/50 shadow-soft card-hover animate-slide-up" style={{animationDelay: '0.3s'}}>
                     <CardContent className="p-6">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="p-3 bg-yellow-100 dark:bg-yellow-900 rounded-xl transition-colors duration-300">
@@ -333,35 +475,118 @@ function App() {
                         </div>
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">Quick Actions</h3>
                       </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <Button 
-                          onClick={() => setActiveTab('wifi')}
-                          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center gap-2"
-                        >
-                          <Wifi className="w-3 h-3" />
-                          WiFi
-                        </Button>
-                        <Button 
-                          onClick={() => setActiveTab('map')}
-                          className="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center gap-2"
-                        >
-                          <MapPin className="w-3 h-3" />
-                          Map
-                        </Button>
-                        <Button 
-                          onClick={() => setActiveTab('explore')}
-                          className="bg-orange-600 hover:bg-orange-700 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center gap-2"
-                        >
-                          <Compass className="w-3 h-3" />
-                          Explore
-                        </Button>
-                        <Button 
-                          onClick={() => setActiveTab('tips')}
-                          className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center gap-2"
-                        >
-                          <Info className="w-3 h-3" />
-                          Tips
-                        </Button>
+                      <div className="space-y-3">
+                        {/* Navigation Actions */}
+                        <div className="grid grid-cols-3 gap-3">
+                          <Button 
+                            onClick={() => setActiveTab('wifi')}
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-200 focus-ring flex items-center gap-2 shadow-soft"
+                          >
+                            <Wifi className="w-3 h-3" />
+                            WiFi
+                          </Button>
+                          <Button 
+                            onClick={() => setActiveTab('map')}
+                            className="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center gap-2"
+                          >
+                            <MapPin className="w-3 h-3" />
+                            Map
+                          </Button>
+                          <Button 
+                            onClick={() => setActiveTab('explore')}
+                            className="bg-orange-600 hover:bg-orange-700 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center gap-2"
+                          >
+                            <Compass className="w-3 h-3" />
+                            Explore
+                          </Button>
+                          <Button 
+                            onClick={() => setActiveTab('events')}
+                            className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center gap-2"
+                          >
+                            <Calendar className="w-3 h-3" />
+                            Events
+                          </Button>
+                          <Button 
+                            onClick={() => setActiveTab('tips')}
+                            className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center gap-2"
+                          >
+                            <Info className="w-3 h-3" />
+                            Tips
+                          </Button>
+                        </div>
+                        
+                        {/* Quick Actions */}
+                        <div className="border-t border-gray-200 dark:border-gray-600 pt-3">
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 font-medium">Quick Actions</p>
+                          <div className="grid grid-cols-4 gap-2">
+                            <Button 
+                              onClick={handleCallHost}
+                              className="bg-red-500 hover:bg-red-600 text-white px-2 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 flex items-center gap-1"
+                            >
+                              <Phone className="w-3 h-3" />
+                              Call
+                            </Button>
+                            <Button 
+                              onClick={handleOpenMaps}
+                              className="bg-indigo-500 hover:bg-indigo-600 text-white px-2 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 flex items-center gap-1"
+                            >
+                              <MapPin className="w-3 h-3" />
+                              Maps
+                            </Button>
+                            <Button 
+                              onClick={handleSharePage}
+                              className="bg-teal-500 hover:bg-teal-600 text-white px-2 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 flex items-center gap-1"
+                            >
+                              <Share2 className="w-3 h-3" />
+                              Share
+                            </Button>
+                            <Button 
+                              onClick={handleSaveToHomeScreen}
+                              className="bg-amber-500 hover:bg-amber-600 text-white px-2 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 flex items-center gap-1"
+                            >
+                              <Smartphone className="w-3 h-3" />
+                              Save
+                            </Button>
+                            <Button 
+                              onClick={handlePrintPage}
+                              className="bg-gray-500 hover:bg-gray-600 text-white px-2 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 flex items-center gap-1"
+                            >
+                              <Printer className="w-3 h-3" />
+                              Print
+                            </Button>
+                            <Button 
+                              onClick={() => alert('Keyboard Shortcuts:\n\nH - Home\nW - WiFi\nM - Map\nE - Explore\nT - Tips\nD - Dark Mode\nP - Print\nS - Share\n? - Show this help')}
+                              className="bg-slate-500 hover:bg-slate-600 text-white px-2 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 flex items-center gap-1"
+                            >
+                              <Info className="w-3 h-3" />
+                              Help
+                            </Button>
+                            <Button 
+                              onClick={() => {
+                                if (pageQRCode) {
+                                  const newWindow = window.open('', '_blank')
+                                  if (newWindow) {
+                                    newWindow.document.write(`
+                                      <html>
+                                        <head><title>Share This Page</title></head>
+                                        <body style="text-align: center; font-family: Arial, sans-serif; padding: 20px;">
+                                          <h2>Copenhagen Couchsurfing Guide</h2>
+                                          <img src="${pageQRCode}" alt="QR Code" style="max-width: 300px; margin: 20px 0;">
+                                          <p>Scan this QR code to share this page with friends!</p>
+                                          <p style="font-size: 12px; color: #666;">${window.location.href}</p>
+                                        </body>
+                                      </html>
+                                    `)
+                                  }
+                                }
+                              }}
+                              className="bg-emerald-500 hover:bg-emerald-600 text-white px-2 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 flex items-center gap-1"
+                            >
+                              <Share2 className="w-3 h-3" />
+                              QR
+                            </Button>
+                          </div>
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
@@ -445,16 +670,45 @@ function App() {
         {activeTab === 'wifi' && <WifiQR />}
         {activeTab === 'map' && <CopenhagenMap />}
         {activeTab === 'explore' && <ThingsToDo />}
+        {activeTab === 'events' && <Events />}
         {activeTab === 'tips' && <PracticalInfo />}
       </main>
 
       {/* Footer */}
-      <footer className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-12 sm:mt-16 transition-colors duration-300">
+      <footer className="no-print bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border-t border-gray-200/50 dark:border-gray-700/50 mt-12 sm:mt-16 transition-all duration-300">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 text-center">
           <p className="text-base sm:text-lg font-semibold text-gray-700 dark:text-gray-300 mb-1 sm:mb-2 transition-colors duration-300">Enjoy your stay in Copenhagen</p>
           <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 transition-colors duration-300">Made for amazing Couchsurfing guests</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-2 transition-colors duration-300">
+            Last updated: {new Date(guestConfig.lastUpdated).toLocaleDateString('en-US', { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            })}
+          </p>
         </div>
       </footer>
+
+      {/* Back to Top Button */}
+      {showBackToTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 transform hover:scale-110 animate-slide-up"
+          aria-label="Back to top"
+        >
+          <ChevronUp className="w-6 h-6" />
+        </button>
+      )}
+
+      {/* Video Modal */}
+      <VideoModal
+        isOpen={isVideoModalOpen}
+        onClose={() => setIsVideoModalOpen(false)}
+        videoId="kRRoCKmsf2Y"
+        title="Welcome to Copenhagen - Get Started Guide"
+      />
     </div>
   )
 }
