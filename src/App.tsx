@@ -7,12 +7,14 @@ import { CopenhagenMap } from './components/CopenhagenMap'
 import { ThingsToDo } from './components/ThingsToDo'
 import { PracticalInfo } from './components/PracticalInfo'
 import { Events } from './components/Events'
-import { MapPin, Wifi, Home, Compass, Info, ArrowRight, MapPin as LocationIcon, Phone, Clock, Shield, Moon, Sun, Menu, X, Share2, Printer, Smartphone, ChevronUp, Calendar, Play } from 'lucide-react'
+import { MapPin, Wifi, Home, Compass, Info, ArrowRight, MapPin as LocationIcon, Phone, Clock, Shield, Moon, Sun, Menu, X, Share2, Printer, Smartphone, ChevronUp, Calendar, Play, MessageCircle } from 'lucide-react'
 import { guestConfig } from '@/config/guestConfig'
 import { AboutHost } from '@/components/AboutHost'
 import { HeaderWeather } from '@/components/HeaderWeather'
 import { WeatherCard } from '@/components/WeatherCard'
 import { VideoModal } from '@/components/VideoModal'
+import { Testimonials } from '@/components/Testimonials'
+import { ContactForm } from '@/components/ContactForm'
 
 function App() {
   const [activeTab, setActiveTab] = useState('home')
@@ -140,6 +142,9 @@ function App() {
         case 'v':
           setActiveTab('events')
           break
+        case 'c':
+          setActiveTab('contact')
+          break
         case 't':
           setActiveTab('tips')
           break
@@ -153,7 +158,7 @@ function App() {
           handleSharePage()
           break
         case '?':
-          alert('Keyboard Shortcuts:\n\nH - Home\nW - WiFi\nM - Map\nE - Explore\nV - Events\nT - Tips\nD - Dark Mode\nP - Print\nS - Share\n? - Show this help')
+          alert('Keyboard Shortcuts:\n\nH - Home\nW - WiFi\nM - Map\nE - Explore\nV - Events\nC - Contact\nT - Tips\nD - Dark Mode\nP - Print\nS - Share\n? - Show this help')
           break
       }
     }
@@ -199,6 +204,7 @@ function App() {
     { id: 'map', label: 'Map', icon: MapPin },
     { id: 'explore', label: 'Explore', icon: Compass },
     { id: 'events', label: 'Events', icon: Calendar },
+    { id: 'contact', label: 'Contact', icon: MessageCircle },
     { id: 'tips', label: 'Tips', icon: Info },
   ]
 
@@ -477,40 +483,47 @@ function App() {
                       </div>
                       <div className="space-y-3">
                         {/* Navigation Actions */}
-                        <div className="grid grid-cols-3 gap-3">
+                        <div className="grid grid-cols-2 gap-3">
                           <Button 
                             onClick={() => setActiveTab('wifi')}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-200 focus-ring flex items-center gap-2 shadow-soft"
+                            className="btn-mobile bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all duration-200 focus-ring flex items-center gap-2 shadow-soft"
                           >
-                            <Wifi className="w-3 h-3" />
+                            <Wifi className="w-4 h-4" />
                             WiFi
                           </Button>
                           <Button 
                             onClick={() => setActiveTab('map')}
-                            className="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center gap-2"
+                            className="btn-mobile bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-all duration-300 flex items-center gap-2"
                           >
-                            <MapPin className="w-3 h-3" />
+                            <MapPin className="w-4 h-4" />
                             Map
                           </Button>
                           <Button 
                             onClick={() => setActiveTab('explore')}
-                            className="bg-orange-600 hover:bg-orange-700 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center gap-2"
+                            className="btn-mobile bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-semibold transition-all duration-300 flex items-center gap-2"
                           >
-                            <Compass className="w-3 h-3" />
+                            <Compass className="w-4 h-4" />
                             Explore
                           </Button>
                           <Button 
                             onClick={() => setActiveTab('events')}
-                            className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center gap-2"
+                            className="btn-mobile bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-all duration-300 flex items-center gap-2"
                           >
-                            <Calendar className="w-3 h-3" />
+                            <Calendar className="w-4 h-4" />
                             Events
                           </Button>
                           <Button 
-                            onClick={() => setActiveTab('tips')}
-                            className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center gap-2"
+                            onClick={() => setActiveTab('contact')}
+                            className="btn-mobile bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-semibold transition-all duration-300 flex items-center gap-2"
                           >
-                            <Info className="w-3 h-3" />
+                            <MessageCircle className="w-4 h-4" />
+                            Contact
+                          </Button>
+                          <Button 
+                            onClick={() => setActiveTab('tips')}
+                            className="btn-mobile bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-semibold transition-all duration-300 flex items-center gap-2"
+                          >
+                            <Info className="w-4 h-4" />
                             Tips
                           </Button>
                         </div>
@@ -521,44 +534,44 @@ function App() {
                           <div className="grid grid-cols-4 gap-2">
                             <Button 
                               onClick={handleCallHost}
-                              className="bg-red-500 hover:bg-red-600 text-white px-2 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 flex items-center gap-1"
+                              className="btn-mobile bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-all duration-300 flex items-center gap-2"
                             >
-                              <Phone className="w-3 h-3" />
+                              <Phone className="w-4 h-4" />
                               Call
                             </Button>
                             <Button 
                               onClick={handleOpenMaps}
-                              className="bg-indigo-500 hover:bg-indigo-600 text-white px-2 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 flex items-center gap-1"
+                              className="btn-mobile bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium transition-all duration-300 flex items-center gap-2"
                             >
-                              <MapPin className="w-3 h-3" />
+                              <MapPin className="w-4 h-4" />
                               Maps
                             </Button>
                             <Button 
                               onClick={handleSharePage}
-                              className="bg-teal-500 hover:bg-teal-600 text-white px-2 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 flex items-center gap-1"
+                              className="btn-mobile bg-teal-500 hover:bg-teal-600 text-white rounded-lg font-medium transition-all duration-300 flex items-center gap-2"
                             >
-                              <Share2 className="w-3 h-3" />
+                              <Share2 className="w-4 h-4" />
                               Share
                             </Button>
                             <Button 
                               onClick={handleSaveToHomeScreen}
-                              className="bg-amber-500 hover:bg-amber-600 text-white px-2 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 flex items-center gap-1"
+                              className="btn-mobile bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-medium transition-all duration-300 flex items-center gap-2"
                             >
-                              <Smartphone className="w-3 h-3" />
+                              <Smartphone className="w-4 h-4" />
                               Save
                             </Button>
                             <Button 
                               onClick={handlePrintPage}
-                              className="bg-gray-500 hover:bg-gray-600 text-white px-2 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 flex items-center gap-1"
+                              className="btn-mobile bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium transition-all duration-300 flex items-center gap-2"
                             >
-                              <Printer className="w-3 h-3" />
+                              <Printer className="w-4 h-4" />
                               Print
                             </Button>
                             <Button 
-                              onClick={() => alert('Keyboard Shortcuts:\n\nH - Home\nW - WiFi\nM - Map\nE - Explore\nT - Tips\nD - Dark Mode\nP - Print\nS - Share\n? - Show this help')}
-                              className="bg-slate-500 hover:bg-slate-600 text-white px-2 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 flex items-center gap-1"
+                              onClick={() => alert('Keyboard Shortcuts:\n\nH - Home\nW - WiFi\nM - Map\nE - Explore\nV - Events\nC - Contact\nT - Tips\nD - Dark Mode\nP - Print\nS - Share\n? - Show this help')}
+                              className="btn-mobile bg-slate-500 hover:bg-slate-600 text-white rounded-lg font-medium transition-all duration-300 flex items-center gap-2"
                             >
-                              <Info className="w-3 h-3" />
+                              <Info className="w-4 h-4" />
                               Help
                             </Button>
                             <Button 
@@ -594,6 +607,18 @@ function App() {
 
                 {/* About Host */}
                 <AboutHost />
+                
+                {/* Section Divider */}
+                <div className="section-divider"></div>
+                
+                {/* Testimonials */}
+                <Testimonials />
+                
+                {/* Section Divider */}
+                <div className="section-divider"></div>
+                
+                {/* Contact Form */}
+                <ContactForm />
               </div>
 
               {/* Right Sidebar - Emergency Contacts & Additional Info */}
@@ -671,6 +696,7 @@ function App() {
         {activeTab === 'map' && <CopenhagenMap />}
         {activeTab === 'explore' && <ThingsToDo />}
         {activeTab === 'events' && <Events />}
+        {activeTab === 'contact' && <ContactForm />}
         {activeTab === 'tips' && <PracticalInfo />}
       </main>
 
