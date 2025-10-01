@@ -8,7 +8,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Separator } from "@/components/ui/separator";
 import { MapPin, Wifi, Coffee, Leaf, Clock, User2, Quote, Mail, CheckCircle2, Sparkles, Star, ExternalLink, MessageCircle } from "lucide-react";
 import { guestConfig } from "@/config/guestConfig";
-import { HeaderWeather } from "./components/HeaderWeather";
+import { HeaderWeather } from "./HeaderWeather";
 
 // Helper: section wrapper
 const Section = ({ id, title, subtitle, children }: { id: string; title: string; subtitle?: string; children: React.ReactNode }) => (
@@ -25,7 +25,7 @@ const Section = ({ id, title, subtitle, children }: { id: string; title: string;
   </section>
 );
 
-export default function App() {
+export function CPHLanding() {
   const { host } = guestConfig;
 
   const handleFormSubmit = (e: React.FormEvent) => {
